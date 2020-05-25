@@ -35,5 +35,5 @@ Representative selection
     Considering the various cluster shape (say, spiral cluster), I came up with the following 2-stage clustering
     1. For any input class, use a clustering technique, then we will have cluster {C_i}
     2. Based on {C_i}'s cardinality {n_i}, we get a number of k_i for k-mean, run k_i-mean on each C_i
-      (note if we use NN cluster in 1, we still need to encode it into some features)
+      (note if we use NN cluster in step 1, we still need to encode it into some features)
     3. find the image whose feature is closest to each mean, use them as the representative

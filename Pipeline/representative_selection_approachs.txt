@@ -1,0 +1,39 @@
+Representative selection
+
+1. idea
+
+  1.1 Original idea from previously group 1
+
+    1. start from a class of images, use VGG19 as a feature extractor, generate the output, flatten them as a feature
+    2. run K-mean(k = 5) on the feature extracted, get the mean on each cluster
+    3. find the image whose feature is closest to each mean, use them as the representative
+
+  1.2 A more abstract version
+
+    1. start from a class of images, use some encoder to get its feature
+    2. run some clustering method
+    3. find the representative in each cluster
+
+2. related method and paper
+
+  2.1 machine learning clustering(has their implementation in https://scikit-learn.org/stable/modules/classes.html#module-sklearn.cluster)
+    Note: these clustering may need some feature extraction, I think PCA?
+      1. k-mean, original clustering method
+      2. DBSCAN, clustering method(https://en.wikipedia.org/wiki/DBSCAN)
+      3.(Gaussian) Mixture Models with EM algorithm(in sklearn.mixture)
+      4. Others
+
+  2.2 deep learning clustering
+    JULE 2016  https://github.com/jwyang/joint-unsupervised-learning 281 cite
+    IDEC 2017 https://github.com/XifengGuo/IDEC 124 cite
+    DCN ICML2017 https://github.com/boyangumn/DCN k-mean based
+    SpectralNet ICLR 2018 https://github.com/KlugerLab/SpectralNet
+    DTKC IEEE2020 submitted https://github.com/DanielTrosten/DTKC the newest one with github repo
+
+3. Pipeline
+    Eventually we need some representatives, thus I hope I can still get the mean of each cluster.
+    Considering the various cluster shape (say, spiral cluster), I came up with the following 2-stage clustering
+    1. For any input class, use a clustering technique, then we will have cluster {C_i}
+    2. Based on {C_i}'s cardinality {n_i}, we get a number of k_i for k-mean, run k_i-mean on each C_i
+      (note if we use NN cluster in 1, we still need to encode it into some features)
+    3. find the image whose feature is closest to each mean, use them as the representative

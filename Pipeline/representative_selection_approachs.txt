@@ -1,5 +1,11 @@
 Representative selection
 
+TL;DR: 1. If only want sklearn involved:
+            sklearn.decomposition.PCA + sklearn.cluster.OPTICS(cluster_method = ‘dbscan’) + sklearn.mixture.GaussianMixture/sklearn.cluster.SpectralClustering
+          else if want a pipeline of NN's(use an NN in this phase):
+            JULE(https://github.com/jwyang/joint-unsupervised-learning) + sklearn.mixture.GaussianMixture/sklearn.cluster.SpectralClustering
+       2. Find the image whose feature is closest to each mean, use them as the representative
+
 1. idea
 
   1.1 Original idea from previously group 1
@@ -24,16 +30,63 @@ Representative selection
       4. Others
 
   2.2 deep learning clustering
-    JULE 2016  https://github.com/jwyang/joint-unsupervised-learning 281 cite
-    IDEC 2017 https://github.com/XifengGuo/IDEC 124 cite
-    DCN ICML2017 https://github.com/boyangumn/DCN k-mean based
-    SpectralNet ICLR 2018 https://github.com/KlugerLab/SpectralNet
-    DTKC IEEE2020 submitted https://github.com/DanielTrosten/DTKC the newest one with github repo
+    JULE 2016 https://github.com/jwyang/joint-unsupervised-learning 281 cite (on pytorch)
+    IDEC 2017 https://github.com/XifengGuo/IDEC 124 cite (on keras)
+    DCN ICML2017 https://github.com/boyangumn/DCN k-mean based (on theano)
+    SpectralNet ICLR 2018 https://github.com/KlugerLab/SpectralNet (on tensorflow)
+    DTKC IEEE2020 submitted https://github.com/DanielTrosten/DTKC the newest one with github repo (on tensorflow)
 
 3. Pipeline
     Eventually we need some representatives, thus I hope I can still get the mean of each cluster.
     Considering the various cluster shape (say, spiral cluster), I came up with the following 2-stage clustering
     1. For any input class, use a clustering technique, then we will have cluster {C_i}
     2. Based on {C_i}'s cardinality {n_i}, we get a number of k_i for k-mean, run k_i-mean on each C_i
-      (note if we use NN cluster in step 1, we still need to encode it into some features)
+      (note if we use NN cluster in 1, we still need to encode it into some features)
     3. find the image whose feature is closest to each mean, use them as the representative
+
+4. Possible solutions
+
+    To estabilish an intuition, please follow the this nice visualization with explaination:
+    https://scikit-learn.org/dev/auto_examples/cluster/plot_cluster_comparison.html
+    All the mentioned cluster technique mentioned has its sklearn implementation.
+
+    Encoder: encoder the image to some new space, probably with some dimension reduction
+      PCA, it can keep the shape somehow in its principle component (That's why I don't use kernel-PCA).
+      Any NN, like VGG19 in original paper, or any other open-source NN
+
+    1-phase cluster:
+      from my perspective, I hope this cluster can have NO NUMBER_OF_CLUSTER PARAMETER SPECIFIED, the possible result is quite few
+      These two is the same:
+      DBSCAN: very popular density-based one.
+      OPTICS: a generalized version of DBSCAN
+
+      This notes is from the official instruction:
+
+          cluster.OPTICS provides a similar clustering with lower memory usage.
+
+      Thus the best solution is OPTICS
+
+    2-phase cluster: from my perspective,
+      I hope this cluster can HAVE NUMBER_OF_CLUSTER PARAMETER SPECIFIED, the number of k_i is based on the 1-phase cluster's cardinality,
+      Meanwhile I want a mean, because we need representative as the result.
+
+      K_i-mean:  very intuitive implementation
+      Gaussian Mixture with EM-algorithm(GMM): latent variable related model, the result like a more general version of k-mean
+      SPECTRAL clustering: performs a low-dimension embedding of the affinity matrix between samples,
+                           followed by clustering, e.g., by KMeans, of the components of the eigenvectors in the low dimensional space.
+
+    If using a NN-clustering, it can replace both Encoder and 1-phase clustering, i.e. we can have
+    Encoder+ clustering_p1 + clustering_p2
+    or
+    DL-clustering + clustering_p2
+
+5. Recommended solutions:
+    5.1. Encoder+clustering_p1+clustering_p2:  PCA + OPTICS + GMM/SPECTRAL
+      PCA as Encoder:
+        1. It's hard to explain what a NN generate in the paper, while PCA is quite intuitive
+        2. PCA can have a direct control on the output dimension
+      OPTICS: optimal solution
+      GMM/SPECTRAL as clustering_p2: well...TBH, I don't like k-mean, GMM and SPECTRAL are generally in the same level
+
+    5.2. JULE + GMM/SPECTRAL
+        the only reason I said JULE here is we have its torch code XD

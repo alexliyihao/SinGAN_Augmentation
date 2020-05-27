@@ -86,7 +86,7 @@ TL;DR: 1. If only want sklearn involved:
         1. It's hard to explain what a NN generate in the paper, while PCA is quite intuitive
         2. PCA can have a direct control on the output dimension
       OPTICS: optimal solution
-      GMM/SPECTRAL as clustering_p2: well...TBH, I don't like k-mean, GMM and SPECTRAL are generally in the same level
+      GMM/SPECTRAL as clustering_p2: well...TBH, I don't like k-mean, GMM and SPECTRAL are generally on the same level
 
     5.2. JULE + GMM/SPECTRAL
         the only reason I said JULE here is we have its torch code XD

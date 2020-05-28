@@ -1,0 +1,33 @@
+1. time cost:
+  For each approach:
+    representative_selection -- instant
+    augmentation:
+      with n representatives,
+        the training of SinGAN should take (n*40) mins
+        the training of BAGAN and ACGAN takes about 6-8 hours
+    evaluation training: should be in 1 hours
+    i.e. the final result should take about ~10 hours to generate, for each approach
+
+2. experiment designation
+
+  test 1
+  Representative_selection vs training models on each images on small image set
+  (From discussion last time, this result should be generally the same, this step is to validate
+  that representative selection can create result on par while the significantly reduce the training time)
+
+      From group 3's result the result of geometric, BAGAN, and training models on each images existed,
+      we need to test 3 labels and get an average
+          MNIST 10*6000*28*28*3
+          CIFAR10 10*5000*32*32*3
+          2 dataset * 3 label = 6 tests (ACGAN and Representative_selection only)
+
+  test 2
+  augmentation quality
+  geometric vs ACGAN vs BAGAN vs representative
+  Tiny Imagenet consists of 200 categories (i.e. classes) where each category has
+  500 training images, 50 validation images, and 50 test images (200*500*224*224*3)
+
+      Random downsample to 20*500*224*224*3 [for 3 time]<-- I don't want this, but it should be there
+      Test 3 label and get an average, drop rate 40/60/75/90/95, 15 test in total
+
+      210[*3] hours expected?

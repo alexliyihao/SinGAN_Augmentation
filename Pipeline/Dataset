@@ -1,0 +1,13 @@
+MNIST 60000 training + 10000 testing(accessable)
+  90/10 partition on training set for validation set
+  i.e. 54000 training + 6000 validation + 10000 testing
+  
+CIFAR10 50000 training + 10000 testing(accessable)
+  90/10 partition on training set for validation set
+  i.e. 45000 training + 5000 validation + 10000 testing
+
+TinyImageNet
+  Each class 500 training, 50 validation(accessable), 50 test(unaccessable)
+  90/10 partition on training set for validation set
+  use official validation set as testing set
+  i.e. 450 training + 50 validation + 50 testing per class

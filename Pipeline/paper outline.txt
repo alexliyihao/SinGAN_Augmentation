@@ -1,0 +1,51 @@
+time-efficient SinGAN approach in data augmentation
+
+abstract:
+1. we purposed a data augmentation pipeline using SinGAN dealing with imbalanced dataset
+2. we quantitatively showed that this pipeline is on par with or even better than:
+  a. geometric transformation(in quality)
+  b. ACGAN(in quality)
+  c. BAGAN(in quality)
+  d. SinGAN training every image (in time-efficiency with generally the same quantity)
+
+intro: xxx(I think we have enough of this)
+
+related work: xxx(I think we have enough of this)
+
+part 1: feasibility analysis
+
+  test 1: structual/tuning approach from group 3 (finished)
+    showing why we are using current hyperparameter setting for SinGAN
+    #we talked about that in last discussion, someone mentioned
+
+  test 2: showing that pipeline performed no worse than SinGAN training every image with better efficiency
+    SinGAN training every image vs pipeline vs geometric <---#I think one benchmark is good enough, but BAGAN data is ready as well
+
+    Dataset MNIST, drop ratio = 97.5/99/99.5%(sample is prepared, "train everything" is trained)
+
+    showing that SinGAN training every image is computationally impossible, and our pipeline is doing no worse than that in accuracy
+    #we talked about that in last discussion, someone mentioned the result is generally the same
+
+    from here we don't need to mention SinGAN training every image anymore
+
+part 2: quality in actual application: geometric transformation vs ACGAN vs BAGAN vs pipeline
+
+  test 1: MNIST, validation ratio = 0.1 (5400 train / 600 val / 1000 test per class)
+  test 2: CIFAR10, validation ratio = 0.1 (5400 train / 600 val / 1000 test)
+
+  test procedure:
+    1. from dataset, randomly select 1 class, randomly drop it by ratio = 40%/60%/90%
+    2. use all the techniques restoring the balance,
+    3. train mobilenet / resnet / efficientnet by the restored training set
+    4. test the final model on testing set
+  measurement:
+    1. the final accuracy
+    2. SSIM in restored dataset
+
+  this procedure should be repeated--I mean it should, but training 3 models and computing average result
+  be time-killing, I'm hesitated here. If so, that's 2*3*3 = 18 test already.
+
+conclusion: this pipeline works
+
+discussion: out pipeline can be in a more abstract form and we can use a NN cluster
+            or more state-of-the-art element here

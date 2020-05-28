@@ -27,7 +27,7 @@
   Tiny Imagenet consists of 200 categories (i.e. classes) where each category has
   500 training images, 50 validation images, and 50 test images (200*500*224*224*3)
 
-      Random downsample to 20*500*224*224*3 [for 3 time]<-- I don't want this, but it should be there
-      Test 3 label and get an average, drop rate 40/60/75/90/95, 15 test in total
+      Random sample 10 classes (to 10*500*224*224*3) for 3 time, drop 1 class
+      drop rate 40/60/75/90/95, 15 test in total
 
-      210[*3] hours expected?
+      210 hours expected
